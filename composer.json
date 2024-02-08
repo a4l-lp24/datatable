@@ -1,0 +1,39 @@
+{
+	"name": "a4l-lp24/datatable",
+	"type": "library",
+	"description": "PHP library for listing laravel resources",
+	"keywords": ["php", "eloquentjoin", "utf-8"],
+	"homepage": "https://github.com/a4l-lp24/datatable",
+	"license": ["MIT"],
+	"authors": [
+		{
+			"name": "Marek Majtán",
+			"role": "Developer, maintainer"
+		}
+	],
+	"require": {
+		"php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
+        "fico7489/laravel-eloquent-join": "^4.1",
+        "laravel/framework": "^7.0 || ^8.0 || ^9.0 || ^10.0"
+	},
+	"suggest": {
+        "spatie/laravel-translatable": "Needed for work with translatable models"
+	},
+	"autoload": {
+		"psr-4": {
+			"DataTable\\": "src/"
+		}
+	},
+    "extra": {
+         "laravel": {
+            "providers": [
+                "DataTable\\DataTableServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+	"config": {
+		"sort-packages": true
+	}
+}
