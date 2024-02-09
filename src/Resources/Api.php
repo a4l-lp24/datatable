@@ -5,9 +5,9 @@
  *
  */
 
-namespace App\Http\Resources\DataTable\Resources;
+namespace DataTable\Resources;
 
-use App\Http\Resources\DataTable\Abstracts\DatabaseResource;
+use DataTable\Abstracts\DatabaseResource;
 
 class Api extends DatabaseResource
 {

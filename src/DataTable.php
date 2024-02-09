@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\DataTable;
+namespace DataTable;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
@@ -9,8 +9,8 @@ use \Illuminate\Database\Eloquent\Model AS EloquentModel;
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\DataTable\Abstracts\CollectionResource;
-use App\Http\Resources\DataTable\Abstracts\DatabaseResource;
+use DataTable\Abstracts\CollectionResource;
+use DataTable\Abstracts\DatabaseResource;
 
 class DataTable
 {
@@ -28,11 +28,11 @@ class DataTable
         $this->with = $with;
 
         if ($this->data instanceof SupportCollection) {
-            $resource = config("core.datatable.resources.collection");
+            $resource = config("datatable.resources.collection");
         } elseif (!empty($this->request->cols[0]["key"])) {
-            $resource = config("core.datatable.resources.grid");
+            $resource = config("datatable.resources.grid");
         } else{
-            $resource = config("core.datatable.resources.api");
+            $resource = config("datatable.resources.api");
         }
         $this->setResource(new $resource);
     }
@@ -82,7 +82,7 @@ class DataTable
     public function get(): mixed
     {
 
-        $collection = config("core.datatable.collection");
+        $collection = config("datatable.collection");
         return new $collection($this->resource->getData());
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\DataTable\Abstracts;
+namespace DataTable\Abstracts;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model AS EloquentModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\DataTable\Interfaces\IDatabaseResource;
+use DataTable\Interfaces\IDatabaseResource;
 use Illuminate\Support\Facades\DB;
 
 abstract class DatabaseResource implements IDatabaseResource

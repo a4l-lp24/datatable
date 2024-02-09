@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\DataTable\Interfaces;
+namespace DataTable\Interfaces;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Collection;
-use App\Http\Resources\DataTable\Abstracts\CollectionResource;
+use DataTable\Abstracts\CollectionResource;
 
 interface ICollectionResource{
 

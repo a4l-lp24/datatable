@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Resources\DataTable\Interfaces;
+namespace DataTable\Interfaces;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model AS EloquentModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use App\Http\Resources\DataTable\Abstracts\DatabaseResource;
+use DataTable\Abstracts\DatabaseResource;
 
 interface IDatabaseResource{
 

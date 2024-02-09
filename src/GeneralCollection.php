@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Http\Resources;
+namespace DataTable;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

@@ -5,9 +5,9 @@
  *
  */
 
-namespace App\Http\Resources\DataTable\Resources;
+namespace DataTable\Resources;
 
-use App\Http\Resources\DataTable\Abstracts\CollectionResource;
+use DataTable\Abstracts\CollectionResource;
 
 class Collection extends CollectionResource
 {

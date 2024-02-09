@@ -5,12 +5,12 @@
  *
  */
 
-namespace App\Http\Resources\DataTable\Abstracts;
+namespace DataTable\Abstracts;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Collection;
-use App\Http\Resources\DataTable\Interfaces\ICollectionResource;
+use DataTable\Interfaces\ICollectionResource;
 
 class CollectionResource implements ICollectionResource
 {
