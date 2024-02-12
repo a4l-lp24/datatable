@@ -38,7 +38,7 @@ class CollectionResource implements ICollectionResource
         $this->collection = $collection;
         $this->request = $request;
         $this->with = $with;
-        $this->strict_with_mode = config("core.datatable.strict_with_mode", true);
+        $this->strict_with_mode = config("datatable.strict_with_mode", true);
         $this->build();
 
         return $this;

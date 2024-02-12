@@ -46,7 +46,7 @@ abstract class DatabaseResource implements IDatabaseResource
         $this->schema = $schema;
         $this->table_name = $this->model->getModel()->getTable();
         $this->table_columns = $this->model->getConnection()->getSchemaBuilder()->getColumnListing($this->table_name);
-        $this->strict_with_mode = config("core.datatable.strict_with_mode", true);
+        $this->strict_with_mode = config("datatable.strict_with_mode", true);
         $this->driver = DB::connection()->getDriverName();
         $this->build();
 
@@ -240,7 +240,7 @@ abstract class DatabaseResource implements IDatabaseResource
         if ($search and in_array($type, self::NUMERIC_TYPES) and (!is_numeric($search) and !is_array($search))) return $model;
 
         // define operators etc...
-        $searchOper = $searchField["operator"] ?? config("core.datatable.default_search_operator");
+        $searchOper = $searchField["operator"] ?? config("datatable.default_search_operator");
         $primaryWhere = $operator ==="or" ? "orWhere" : "where";
         $where = $has ? "whereJoin" : "where";
         $nullWhere = $has ? "orWhereJoin" :  "orWhere";
@@ -299,7 +299,7 @@ abstract class DatabaseResource implements IDatabaseResource
     private static function resolveColumnSpecificSearchString($model, $search, $whereoperator, $columnName, $searchOper, $type, $searchOperator, $column){
 
         // If spatie translatable feature is enabled https://spatie.be/docs/laravel-translatable/ 
-        if(config("core.datatable.allow_translatable") AND $type === "json" AND strpos($whereoperator, "join") === false AND property_exists($model->getModel(), "translatable") AND is_array($model->getModel()->translatable) AND in_array(end($column), $model->getModel()->translatable)){
+        if(config("datatable.allow_translatable") AND $type === "json" AND strpos($whereoperator, "join") === false AND property_exists($model->getModel(), "translatable") AND is_array($model->getModel()->translatable) AND in_array(end($column), $model->getModel()->translatable)){
             $model->$whereoperator($columnName . "->" . app()->getLocale(), $searchOperator, self::resolveSearchString($searchOper, $type, $search));
         }else{
             $model->$whereoperator($columnName, $searchOperator, self::resolveSearchString($searchOper, $type, $search));
