@@ -9,8 +9,8 @@ use \Illuminate\Database\Eloquent\Model AS EloquentModel;
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
-use DataTable\Abstracts\CollectionResource;
-use DataTable\Abstracts\DatabaseResource;
+use DataTable\Interfaces\ICollectionResource;
+use DataTable\Interfaces\IDatabaseResource;
 
 class DataTable
 {
@@ -18,7 +18,7 @@ class DataTable
     protected SupportCollection|EloquentModel|Builder|Relation $data;
     protected Request $request;
     protected array $with = [];
-    protected CollectionResource|DatabaseResource $resource;
+    protected ICollectionResource|IDatabaseResource $resource;
 
     public function __construct(SupportCollection|EloquentModel|Builder|Relation $data, Request $request, array $with = [])
     {
@@ -42,7 +42,7 @@ class DataTable
      *
      * @return DataTable
      */
-    public function setResource(CollectionResource|DatabaseResource $resource): DataTable
+    public function setResource(ICollectionResource|IDatabaseResource $resource): DataTable
     {
 
         $this->resource = $resource->init($this->data, $this->request, $this->with);
