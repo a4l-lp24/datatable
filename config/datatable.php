@@ -22,5 +22,9 @@ return [
     /**
      * if true, then spatie translatable fields will be searched in app language, see https://spatie.be/docs/laravel-translatable/v6/introduction
      */ 
-    'allow_translatable' => true
+    'allow_translatable' => true,
+    /**
+     * if any operator is not set, then use this default
+     */
+    'default_search_operator' => 'lk'
 ];
