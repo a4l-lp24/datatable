@@ -185,7 +185,7 @@ abstract class DatabaseResource implements IDatabaseResource
         return ($type === "boolean" ? self::getBoolVal($search) : ((in_array($type, self::NUMERIC_TYPES) or in_array($oper, ["lt", "gt", "le", "ge", "eq", "ne"])) ? $search : (isset($search) ? ($type === "json" ? "%" . $search . "%" : "%".$search."%") : "")));
     }
 
-    private static function resolveSearchConnectors($oper, $phpoper, $searchOper = "eq")
+    protected static function resolveSearchConnectors($oper, $phpoper, $searchOper = "eq")
     {
 
         $searchOper = $searchOper === "ne" ? "ne" : "eq";
@@ -202,7 +202,7 @@ abstract class DatabaseResource implements IDatabaseResource
         return array_key_exists($oper, $opers) ? $opers[$oper][$searchOper][$phpoper] : "where";
     }
 
-    private static function getTableName($model, array $column)
+    protected static function getTableName($model, array $column)
     {
 
         $relation = $model->getModel();
