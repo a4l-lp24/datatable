@@ -21,7 +21,7 @@ class Api extends DatabaseResource
         $this->filterColumns($this->request->searchColumns ?: $this->request->all());
 
         // select only specific relations in current model      
-        $this->setWith($this->with);
+        $this->setWith($this->request->with ?? $this->with);
 
         // search all the columns
         if (!empty($this->request->search)) {
