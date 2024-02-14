@@ -25,7 +25,7 @@ abstract class DatabaseResource implements IDatabaseResource
     protected array $columns = [];
     protected array $select = ["*"];
     private array $columnTypes = [];
-    protected const PER_PAGE = 20;
+    protected const PER_PAGE = 50;
     protected const PAGE_NAME = "page";
     protected const PER_PAGE_NAME = "per_page";
     protected const SELECT_COLUMN_NAME = "select";
