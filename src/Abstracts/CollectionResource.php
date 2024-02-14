@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use \Illuminate\Support\Collection;
 use DataTable\Interfaces\ICollectionResource;
 
-class CollectionResource implements ICollectionResource
+abstract class CollectionResource implements ICollectionResource
 {
 
     protected Collection $collection;
@@ -45,12 +45,7 @@ class CollectionResource implements ICollectionResource
 
     }
 
-    protected function build(): CollectionResource
-    {
-
-        return $this;
-
-    }
+    abstract protected function build(): CollectionResource;
 
     public function getData(): LengthAwarePaginator
     {

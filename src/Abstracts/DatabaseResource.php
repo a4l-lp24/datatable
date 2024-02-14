@@ -54,10 +54,7 @@ abstract class DatabaseResource implements IDatabaseResource
 
     }
 
-    protected function build(): DatabaseResource
-    {
-        return $this;
-    }
+    abstract protected function build(): DatabaseResource;
 
     protected function filterColumns($columns){
 
@@ -282,6 +279,7 @@ abstract class DatabaseResource implements IDatabaseResource
             } else {
 
                 $whereoperator = self::resolveSearchConnectors($operator, $where, $searchOper);
+
                 $model = $model->$primaryWhere(function($model) use ($search, $whereoperator, $columnName, $searchOper, $type, $nullWhere, $searchOperator, $column) {
 
                     $model = self::resolveColumnSpecificSearchString($model, $search, $whereoperator, $columnName, $searchOper, $type, $searchOperator, $column);
