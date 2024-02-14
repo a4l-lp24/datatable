@@ -43,6 +43,8 @@ class Api extends DatabaseResource
 
         // select only specific columns in current model
         $this->setSelect($this->request->select ?: ["*"]);
+
+        // sort data
         $this->sortData();
 
         return $this;

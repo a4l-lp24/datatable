@@ -49,6 +49,8 @@ class Grid extends DatabaseResource
  
         // select only specific columns in current model
         $this->setSelect($this->selectColumns ?: ["*"]);
+        
+        // sort data
         $this->sortData();
 
         return $this;

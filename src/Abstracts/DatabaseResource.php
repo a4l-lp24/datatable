@@ -145,6 +145,7 @@ abstract class DatabaseResource implements IDatabaseResource
             foreach($sort_array AS $key => $sort){
                 $ex = explode(".", $sort);
                 $sort_method = (count($ex) > 1) ? "orderByJoin" : "orderBy";
+                if(count($ex) > 1) $this->model->getModel()->setAttribute($ex[0], null);
                 $this->model = $this->model->{$sort_method}($sort, (!empty($order_array[$key]) AND in_array($order_array[$key], ["desc", "asc"])) ? $order_array[$key] : "asc");
             }
         }
