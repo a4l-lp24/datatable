@@ -18,6 +18,8 @@ class Grid extends DatabaseResource
         // filter columns and remove undefined
         $this->filterColumns($this->request->cols ?: []);
 
+        // select only specific relations in current model
+        $this->setWith($this->selectWiths);
 
         // search all the columns
         if (!empty($this->request->search)) {
@@ -47,11 +49,6 @@ class Grid extends DatabaseResource
  
         // select only specific columns in current model
         $this->setSelect($this->selectColumns ?: ["*"]);
-
-        // select only specific relations in current model
-        $this->setWith($this->selectWiths);
-
-        // sort data
         $this->sortData();
 
         return $this;
