@@ -23,14 +23,14 @@ abstract class CollectionResource implements ICollectionResource
     protected array $table_columns;
     protected array $columns;
     protected array $select = ["*"];
-    protected const PER_PAGE = 20;
+    protected int $per_page = 50;
     protected const PAGE_NAME = "page";
     protected const PER_PAGE_NAME = "per_page";
     protected const SELECT_COLUMN_NAME = "select";
     protected const ORDER_COLUMN_NAME = "orderColumn";
     protected const ORDER_DIRECTION_NAME = "orderDirection";
     protected bool $strict_with_mode = true;
-    protected const PREVENTED_COLUMN_NAMES = [self::PER_PAGE, self::ORDER_COLUMN_NAME, self::ORDER_DIRECTION_NAME, self::SELECT_COLUMN_NAME, self::PAGE_NAME, self::PER_PAGE_NAME];
+    protected const PREVENTED_COLUMN_NAMES = [self::ORDER_COLUMN_NAME, self::ORDER_DIRECTION_NAME, self::SELECT_COLUMN_NAME, self::PAGE_NAME, self::PER_PAGE_NAME];
 
     public function init(Collection $collection, Request $request, $with = []): CollectionResource
     {
@@ -38,6 +38,7 @@ abstract class CollectionResource implements ICollectionResource
         $this->collection = $collection;
         $this->request = $request;
         $this->with = $with;
+        $this->per_page = config("datatable.default_per_page", 50);
         $this->strict_with_mode = config("datatable.strict_with_mode", true);
         $this->build();
 
@@ -57,7 +58,7 @@ abstract class CollectionResource implements ICollectionResource
     private function paginate(): LengthAwarePaginator
     {
 
-        $perPage = (!empty($this->request->{self::PER_PAGE_NAME}) and is_numeric($this->request->{self::PER_PAGE_NAME})) ? $this->request->{self::PER_PAGE_NAME} : self::PER_PAGE;
+        $perPage = (!empty($this->request->{self::PER_PAGE_NAME}) and is_numeric($this->request->{self::PER_PAGE_NAME})) ? $this->request->{self::PER_PAGE_NAME} : $this->per_page;
         $page = $this->request->{self::PAGE_NAME};
 
         return new LengthAwarePaginator(

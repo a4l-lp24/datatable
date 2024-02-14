@@ -26,5 +26,9 @@ return [
     /**
      * if any operator is not set, then use this default
      */
-    'default_search_operator' => 'lk'
+    'default_search_operator' => 'lk',
+    /**
+     * Default records per page - can be adjusted by request
+     */
+    'default_per_page' => 50
 ];

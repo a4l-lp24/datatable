@@ -25,14 +25,14 @@ abstract class DatabaseResource implements IDatabaseResource
     protected array $columns = [];
     protected array $select = ["*"];
     private array $columnTypes = [];
-    protected const PER_PAGE = 50;
+    protected int $per_page = 50;
     protected const PAGE_NAME = "page";
     protected const PER_PAGE_NAME = "per_page";
     protected const SELECT_COLUMN_NAME = "select";
     protected const ORDER_COLUMN_NAME = "orderColumn";
     protected const ORDER_DIRECTION_NAME = "orderDirection";
     protected bool $strict_with_mode = true;
-    protected const PREVENTED_COLUMN_NAMES = [self::PER_PAGE, self::ORDER_COLUMN_NAME, self::ORDER_DIRECTION_NAME, self::SELECT_COLUMN_NAME, self::PAGE_NAME, self::PER_PAGE_NAME];
+    protected const PREVENTED_COLUMN_NAMES = [self::ORDER_COLUMN_NAME, self::ORDER_DIRECTION_NAME, self::SELECT_COLUMN_NAME, self::PAGE_NAME, self::PER_PAGE_NAME];
     protected const NUMERIC_TYPES = ["integer", "smallint", "bigint", "float", "decimal"];
     private string|null $driver = null;
     private const PGSQL_DRIVER = "pgsql";
@@ -47,6 +47,7 @@ abstract class DatabaseResource implements IDatabaseResource
         $this->table_name = $this->model->getModel()->getTable();
         $this->table_columns = $this->model->getConnection()->getSchemaBuilder()->getColumnListing($this->table_name);
         $this->strict_with_mode = config("datatable.strict_with_mode", true);
+        $this->per_page = config("datatable.default_per_page", 50);
         $this->driver = DB::connection()->getDriverName();
         $this->build();
 
@@ -152,7 +153,7 @@ abstract class DatabaseResource implements IDatabaseResource
 
     protected function paginate(){
         
-        return $this->model->paginate((!empty($this->request->{self::PER_PAGE_NAME}) and is_numeric($this->request->{self::PER_PAGE_NAME})) ? $this->request->{self::PER_PAGE_NAME} : self::PER_PAGE, $this->select);
+        return $this->model->paginate((!empty($this->request->{self::PER_PAGE_NAME}) and is_numeric($this->request->{self::PER_PAGE_NAME})) ? $this->request->{self::PER_PAGE_NAME} : $this->per_page, $this->select);
     
     }
 

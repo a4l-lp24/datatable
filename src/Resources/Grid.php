@@ -12,8 +12,6 @@ use DataTable\Abstracts\DatabaseResource;
 class Grid extends DatabaseResource
 {
 
-    protected const PER_PAGE = 20;
-
     public function build(): DatabaseResource
     {
 

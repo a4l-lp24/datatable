@@ -12,8 +12,6 @@ use DataTable\Abstracts\DatabaseResource;
 class Api extends DatabaseResource
 {
 
-    protected const PER_PAGE = 50;
-
     public function build(): DatabaseResource
     {
 
