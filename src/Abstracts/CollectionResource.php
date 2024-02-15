@@ -62,7 +62,7 @@ abstract class CollectionResource implements ICollectionResource
         $page = $this->request->{self::PAGE_NAME};
 
         return new LengthAwarePaginator(
-            $this->collection->forPage($page, $perPage),
+            $this->collection->forPage($page, $perPage)->values(),
             $this->collection->count(),
             $perPage,
             $page,
