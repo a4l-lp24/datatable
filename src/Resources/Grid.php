@@ -17,6 +17,9 @@ class Grid extends DatabaseResource
 
         // filter columns and remove undefined
         $this->filterColumns($this->request->cols ?: []);
+ 
+        // select only specific columns in current model
+        $this->setSelect($this->selectColumns ?: ["*"]);
 
         // select only specific relations in current model
         $this->setWith($this->selectWiths);
@@ -46,9 +49,6 @@ class Grid extends DatabaseResource
                 });
             }
         }
- 
-        // select only specific columns in current model
-        $this->setSelect($this->selectColumns ?: ["*"]);
         
         // sort data
         $this->sortData();

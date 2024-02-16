@@ -131,6 +131,7 @@ abstract class DatabaseResource implements IDatabaseResource
 
     protected function setSelect(array $select){
         $this->select = $select;
+        $this->model = $this->model->select($select);
     }
 
     protected function sortData(){
