@@ -18,9 +18,6 @@ class Api extends DatabaseResource
         // filter columns and remove undefined
         $this->filterColumns($this->request->searchColumns ?: $this->request->all());
 
-        // select only specific columns in current model
-        $this->setSelect($this->request->select ?: ["*"]);
-
         // select only specific relations in current model      
         $this->setWith($this->request->with ?? $this->with);
 

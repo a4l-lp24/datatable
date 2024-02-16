@@ -59,8 +59,7 @@ abstract class DatabaseResource implements IDatabaseResource
 
     protected function filterColumns($columns){
 
-        $this->setColumns($columns);
-        foreach ($this->columns as $kcol => $column) {
+        foreach ($columns as $kcol => $column) {
 
             if(is_array($column)){
                 $keys = [($column["data"] ?? $column["key"] ?? $kcol)];
@@ -77,6 +76,7 @@ abstract class DatabaseResource implements IDatabaseResource
                 if (count($ex) === 1) {
 
                     if (in_array($ex[0], $this->table_columns) and !in_array($this->table_name . "." . $ex[0], $this->selectColumns)) $this->selectColumns[] = $this->table_name . "." . $ex[0];
+                    if (!in_array($key, $this->table_columns)) unset($columns[$key]);
 
                 // select relationship column, check within allowed relations
                 } else {
@@ -93,13 +93,16 @@ abstract class DatabaseResource implements IDatabaseResource
                             $method = method_exists($relation, "getLocalKeyName") ? "getLocalKeyName" : (method_exists($relation, "getParentKeyName") ? "getParentKeyName" : "getForeignKeyName");
                             $selectTableName = $this->table_name . "." . $relation->{$method}();
                             if (!in_array($selectTableName, $this->selectColumns)) $this->selectColumns[] = $selectTableName;
+                            if (!in_array($selectTableName, $this->selectColumns) and !in_array($selKey, $this->selectWiths)) unset($columns[$kcol]);
                         }
 
                     }
 
                 }
             }
-        }        
+        }  
+
+        $this->setColumns($columns);
     }
 
     private function checkRelationPermissions($key): bool
@@ -131,6 +134,7 @@ abstract class DatabaseResource implements IDatabaseResource
 
     protected function setSelect(array $select){
         $this->select = $select;
+        $this->model = $this->model->select($this->select);
     }
 
     protected function sortData(){
@@ -154,7 +158,7 @@ abstract class DatabaseResource implements IDatabaseResource
 
     protected function paginate(){
         
-        return $this->model->paginate((!empty($this->request->{self::PER_PAGE_NAME}) and is_numeric($this->request->{self::PER_PAGE_NAME})) ? $this->request->{self::PER_PAGE_NAME} : $this->per_page, $this->select);
+        return $this->model->paginate((!empty($this->request->{self::PER_PAGE_NAME}) and is_numeric($this->request->{self::PER_PAGE_NAME})) ? $this->request->{self::PER_PAGE_NAME} : $this->per_page);
     
     }
 
