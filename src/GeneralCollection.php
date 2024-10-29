@@ -4,23 +4,13 @@ namespace DataTable;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class GeneralCollection extends ResourceCollection
-{
-    // For keeping keys in arrays. When false then keys will be lost if indexes are numeric value.
+class GeneralCollection extends ResourceCollection {
     protected $preserveKeys = true;
 
-    /**
-     * Transform the resource into a JSON array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
-    public function toArray($request)
-    {
+    public function toArray($request): array { 
         return [
             'data' => $this->collection,
-            'links' => [],
+            'links' => []
         ];
     }
-
 }

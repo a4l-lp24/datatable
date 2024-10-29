@@ -2,33 +2,17 @@
 
 namespace DataTable\Interfaces;
 
+use DataTable\Abstracts\DatabaseResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model AS EloquentModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use DataTable\Abstracts\DatabaseResource;
 
 interface IDatabaseResource{
+    public function init(Model|Builder|Relation $model, Request $request, array $with = [], array $schema = []): DatabaseResource;
 
-    /**
-     * Initialize data.
-     *
-     * @return DatabaseResource
-     */
-    public function init(EloquentModel|Builder|Relation $model, Request $request, $with = [], $schema = []): DatabaseResource;
-    /**
-     * Display the resource.
-     *
-     * @return EloquentModel|Builder
-     */
-    public function getBuilder(): EloquentModel|Builder|Relation;
+    public function getBuilder(): Model|Builder|Relation;
 
-    /**
-     * Display listing of the resource.
-     *
-     * @return LengthAwarePaginator
-     */
     public function getData(): LengthAwarePaginator;
-
 }
