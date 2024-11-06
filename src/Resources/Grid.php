@@ -23,7 +23,7 @@ class Grid extends DatabaseResource {
         }
 
         foreach ($this->request->params ?? [] as $key => $column) {
-            if (str_contains($key, 'or_'))
+            if (str_contains($key, 'or_') && is_array($column))
                 $this->model = $this->model->where(function () use ($column) {
                     foreach ($column as $index => $record)
                         foreach ($record as $subKey => $subColumn)

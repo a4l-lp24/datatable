@@ -184,9 +184,9 @@ abstract class DatabaseResource implements IDatabaseResource {
             $type = $this->columnTypes[$tableName][$columnLast] = $model->getConnection()->getSchemaBuilder()->getColumnType($tableName, $columnLast);
         }
 
-        $search = empty($searchField['operator'] ?? null) ? $searchField : $searchField['value'] ?? null;
+        $search = empty($searchField['operator'] ?? null) ? $searchField : ($searchField['value'] ?? null);
 
-        if ($search && in_array($type, self::NUMERIC_TYPES) && !is_numeric($search) && !is_array($search) && $searchField['operator'] !== 'wc')
+        if ($search && in_array($type, self::NUMERIC_TYPES) && !is_numeric($search) && !is_array($search) && ($searchField['operator'] ?? null) !== 'wc')
             return $model; # Return model if trying to search different data type
 
         $searchOper = $searchField['operator'] ?? config('datatable.default_search_operator');
@@ -293,7 +293,10 @@ abstract class DatabaseResource implements IDatabaseResource {
         if (in_array($operation, ['lt', 'gt', 'le', 'ge', 'eq', 'ne']))
             return $search;
 
-        return '%' . $search . '%';
+        if (isset($search))
+            return '%' . $search . '%';
+
+        return '';
     }
 
     protected static function resolveSearchConnectors(string $relation, string $laravelOperation, string $searchOperation = 'eq'): string {
