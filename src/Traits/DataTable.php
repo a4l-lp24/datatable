@@ -2,29 +2,13 @@
 
 namespace App\Http\Resources\Traits;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\DataTableMops\DataTable AS DataTableDataTable;
+use Illuminate\Http\Request;
 
-trait DataTable
-{
+trait DataTable {
+    public static function watchDataTable($data, Request $request, array $schema = [], array $with = [], bool $collection = true): mixed {
+        $table = new DataTableDataTable($data, $request, $with, $schema);
 
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param $data
-     * @param Request $request
-     * @param array $schema
-     * @param array $with
-     * @param bool $collection
-     * @return mixed
-     */
-    public static function watchDataTable($data, Request $request, array $schema = [], $with = [], $collection = true): mixed
-    {
-
-        $dt = new DataTableDataTable($data, $request, $with, $schema);
-        return $collection ? $dt->get() : $dt->getData();
-
+        return $collection ? $table->get() : $table->getData();
     }
-
 }
