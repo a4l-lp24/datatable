@@ -10,6 +10,8 @@ class Grid extends DatabaseResource {
     protected function build(): DatabaseResource {
         $this->filterColumns($this->request->cols ?: []);
 
+        $this->setSelect($this->selectColumns ?: ['*']);
+
         $this->setWith($this->selectWiths);
 
         if (!empty($this->request->search)) {
@@ -34,8 +36,6 @@ class Grid extends DatabaseResource {
                     $this->model = $this->resolveColumnSearchString($this->model, $key, $column);
                 });
         }
-
-        $this->setSelect($this->selectColumns ?: ['*']);
 
         $this->sortData();
 

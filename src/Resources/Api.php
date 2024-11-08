@@ -29,8 +29,6 @@ class Api extends DatabaseResource {
             }
         }
 
-        $this->setSelect($this->request->select ?: ['*']);
-
         $this->sortData();
 
         return $this;
