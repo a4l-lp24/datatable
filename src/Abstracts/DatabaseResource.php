@@ -187,7 +187,7 @@ abstract class DatabaseResource implements IDatabaseResource {
 
         $search = empty($searchField['operator'] ?? null) ? $searchField : ($searchField['value'] ?? null);
 
-        if ($search && in_array($type, self::NUMERIC_TYPES) && !is_numeric($search) && !is_array($search) && ($searchField['operator'] ?? null) !== 'wc')
+        if ($search && in_array($type, self::NUMERIC_TYPES) && !is_numeric($search) && !is_array($search) && ($searchField['operator'] ?? null) !== 'wc' && ($searchField['operator'] ?? null) !== 'nc')
             return $model; # Return model if trying to search different data type
 
         $searchOper = $searchField['operator'] ?? config('datatable.default_search_operator');
@@ -196,10 +196,10 @@ abstract class DatabaseResource implements IDatabaseResource {
         $nullWhere = $has ? 'orWhereJoin' : 'orWhere';
         $searchOperator = self::resolveSearchOperator($searchOper, $type, $this->driver);
 
-        if ($searchOper === 'wc' && isset($searchField['value']))
-            return $model->$primaryWhere(function ($query) use ($columnName, $searchField, $operator, $tableName) {
-                $query->where(function ($dummyQuery) use ($columnName, $searchField) {
-                    if (str_contains($columnName, '.'))
+        if (($searchOper === 'wc' || $searchOper === 'nc') && isset($searchField['value']))
+            return $model->$primaryWhere(function ($query) use ($columnName, $searchField, $operator, $tableName, $searchOper, $has) {
+                $query->where(function ($dummyQuery) use ($columnName, $searchField, $has) {
+                    if (str_contains($columnName, '.') && $has)
                         $dummyQuery
                             ->orWhereJoin($columnName, '!=', null)
                             ->orWhereJoin($columnName, '=', null);
@@ -219,11 +219,17 @@ abstract class DatabaseResource implements IDatabaseResource {
                 if (!str_contains($searchField['value'], '.'))
                     $searchField['value'] = $this->table_name . '.' . $searchField['value'];
 
-                if ($operator === 'and')
+                if ($searchOper === 'wc' && $operator === 'and')
                     $query->whereColumn($columnName, '=', $searchField['value']);
 
-                if ($operator === 'or')
+                if ($searchOper === 'wc' && $operator === 'or')
                     $query->orWhereColumn($columnName, '=', $searchField['value']);
+
+                if ($searchOper === 'nc' && $operator === 'and')
+                    $query->whereColumn($columnName, '!=', $searchField['value']);
+
+                if ($searchOper === 'nc' && $operator === 'or')
+                    $query->orWhereColumn($columnName, '!=', $searchField['value']);
             });
 
         if ($searchOper === 'nn') 
