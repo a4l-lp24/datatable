@@ -26,10 +26,12 @@ class Grid extends DatabaseResource {
 
         foreach ($this->request->params ?? [] as $key => $column) {
             if (str_contains($key, 'or_') && is_array($column))
-                $this->model = $this->model->where(function () use ($column) {
-                    foreach ($column as $index => $record)
-                        foreach ($record as $subKey => $subColumn)
-                            $this->model = $this->resolveColumnSearchString($this->model, $subKey, $subColumn, $index === 0 ? 'and' : 'or');
+                $this->model = $this->model->where(function ($query) use ($column) {
+                    $query->where(function ($orQuery) use ($column) {
+                        foreach ($column as $index => $record)
+                            foreach ($record as $subKey => $subColumn)
+                                $orQuery = $this->resolveColumnSearchString($orQuery, $subKey, $subColumn, $index === 0 ? 'and' : 'or');
+                    });
                 });
             else
                 $this->model = $this->model->where(function () use ($column, $key) {
