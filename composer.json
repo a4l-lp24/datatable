@@ -11,6 +11,12 @@
 			"role": "Developer, maintainer"
 		}
 	],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/a4l-lp24/laravel-eloquent-join.git"
+        }
+    ],
 	"require": {
 		"php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
         "a4l-lp24/laravel-eloquent-join": "*@dev",
