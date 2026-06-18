@@ -14,7 +14,7 @@ class Collection extends CollectionResource {
             return (array) $item;
         });
 
-        $columns = $this->request->cols ?? $this->request->columns ?? [];
+        $columns = $this->request->cols ?? $this->request->columns ?? $this->request->searchColumns ?? [];
         $search = $this->request->search ?? '';
         $params = $this->request->params ?? [];
 
@@ -24,11 +24,16 @@ class Collection extends CollectionResource {
                     return stripos($item[$column['key']], $search) !== false;
             });
         else
-            foreach ($columns as $column)
-                if (!empty($column['search']))
+            foreach ($columns as $key => $column)
+                if (!empty($column['search'])){
                     $collection = $collection->filter(function ($item) use ($column) {
                         return stripos($item[$column['key']], $column['search']) !== false;
                     });
+                }elseif(!empty($column) AND !is_array($column)){
+                    $collection = $collection->filter(function ($item) use ($column, $key) {
+                        return stripos($item[$key], $column) !== false;
+                    });
+                }
 
         foreach ($params as $key => $column)
             $collection = $collection->filter(function ($item) use ($column, $key) {
