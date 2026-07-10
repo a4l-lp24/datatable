@@ -31,7 +31,7 @@ class Collection extends CollectionResource {
                     });
                 }elseif(!empty($column) AND !is_array($column)){
                     $collection = $collection->filter(function ($item) use ($column, $key) {
-                        return stripos($item[$key], $column) !== false;
+                        return array_key_exists($key, $item) ? (stripos($item[$key], $column) !== false) : true;
                     });
                 }
 
