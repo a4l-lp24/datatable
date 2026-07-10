@@ -42,12 +42,17 @@ abstract class DatabaseResource implements IDatabaseResource {
     ];
 
     protected const NUMERIC_TYPES = [
-        'integer',
-        'smallint',
-        'bigint',
-        'float',
-        'decimal'
+        // MySQL: information_schema.columns.data_type
+        'int','integer','tinyint','smallint','mediumint','bigint',
+        'decimal','numeric','float','double','real','bit','year',
+        // Postgres: pg_type.typname (native names returned by Laravel 11's Schema::getColumnType()
+        // since doctrine/dbal was dropped; e.g. integer -> int4, bigint -> int8, boolean -> bool)
+        'int2','int4','int8','float4','float8','money','oid',
     ];
+
+    protected const BOOLEAN_TYPES = ['boolean', 'bool'];
+
+    protected const JSON_TYPES = ['json', 'jsonb'];
 
     public function init(Model|Builder|Relation $model, Request $request, array $with = [], array $schema = []): DatabaseResource {
         $this->model = $model;
@@ -275,7 +280,7 @@ abstract class DatabaseResource implements IDatabaseResource {
         if (in_array($type, self::NUMERIC_TYPES))
             $compare = '=';
 
-        if ($type === 'boolean')
+        if (in_array($type, self::BOOLEAN_TYPES))
             $compare = 'IS';
 
         return [
@@ -291,7 +296,7 @@ abstract class DatabaseResource implements IDatabaseResource {
     }
 
     protected static function resolveSearchString(string $operation, string $type, mixed $search): mixed {
-        if ($type === 'boolean')
+        if (in_array($type, self::BOOLEAN_TYPES))
             return self::toBooleanValue($search);
 
         if (in_array($type, self::NUMERIC_TYPES))
@@ -322,7 +327,7 @@ abstract class DatabaseResource implements IDatabaseResource {
 
     protected static function resolveColumnSpecificSearchString(mixed $model, mixed $search, string $whereoperator, string $columnName, string $searchOper, string $type, string $searchOperator, array $column): mixed {
         $isTranslatableEnabled = config('datatable.allow_translatable');
-        $isJsonType = $type === 'json';
+        $isJsonType = in_array($type, self::JSON_TYPES);
         $isNotJoin = !str_contains($whereoperator, 'join');
         $isModelTranslatable = property_exists($model->getModel(), 'translatable');
         $isColumnTranslatable = $isModelTranslatable && is_array($model->getModel()->translatable) && in_array(end($column), $model->getModel()->translatable);
