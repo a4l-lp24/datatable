@@ -20,7 +20,7 @@
 	"require": {
 		"php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
         "a4l-lp24/laravel-eloquent-join": "*",
-        "laravel/framework": "^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0"
+        "laravel/framework": "^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0"
 	},
 	"suggest": {
         "spatie/laravel-translatable": "Needed for work with translatable models"
