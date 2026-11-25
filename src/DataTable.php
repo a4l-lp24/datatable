@@ -52,17 +52,50 @@ class DataTable {
         return new $collection($this->resource->getData());
     }
 
-    public function getDistinctValues(string $column): array { # Unique values of one column with all filters of the table, without paging
-        # only a column which the table itself sends as searchable
-        $requested = collect($this->request->cols ?? [])->first(function ($col) use ($column) {
-            return ($col['text'] ?? $col['data'] ?? $col['key'] ?? null) === $column;
-        });
+    public function getDistinctValues(string $column): array { # Unique values of one column with all filters of the resource, without paging
+        $search = $this->getDistinctSearch($column);
+        $direction = $this->request->orderDirection === 'desc' ? 'desc' : 'asc';
+        $limit = is_numeric($this->request->per_page ?? null) ? (int) $this->request->per_page : config('datatable.default_per_page', 50);
 
-        if (($requested['searchable'] ?? null) !== 'true')
-            abort(422, 'Column ' . $column . ' is not searchable');
+        $builder = $this->resource->getBuilder();
 
-        # copy of the table query with all its filters
-        $builder = clone $this->resource->getBuilder();
+        if ($builder instanceof Collection)
+            return $this->getDistinctValuesFromCollection($builder, $column, $search, $direction, $limit);
+
+        return $this->getDistinctValuesFromBuilder(clone $builder, $column, $search, $direction, $limit);
+    }
+
+    protected function getDistinctSearch(string $column): string { # Text typed in the column
+        # grid and collection: only a column which the table itself sends as searchable
+        if (!empty($this->request->cols)) {
+            $requested = collect($this->request->cols)->first(function ($col) use ($column) {
+                return ($col['text'] ?? $col['data'] ?? $col['key'] ?? null) === $column;
+            });
+
+            if (($requested['searchable'] ?? null) !== 'true')
+                abort(422, 'Column ' . $column . ' is not searchable');
+
+            $search = $requested['search'] ?? '';
+        } else {
+            # api: e.g. /data/purchases?name=xxx&distinct=name
+            $search = ($this->request->searchColumns ?: $this->request->all())[$column] ?? '';
+        }
+
+        return is_scalar($search) ? (string) $search : '';
+    }
+
+    protected function getDistinctValuesFromCollection(Collection $collection, string $column, string $search, string $direction, int $limit): array {
+        $values = $collection
+            ->map(fn ($item) => data_get($item, $column))
+            ->filter(fn ($value) => is_scalar($value) && $value !== '' && stripos((string) $value, $search) !== false)
+            ->unique();
+
+        $values = $direction === 'desc' ? $values->sortDesc() : $values->sort();
+
+        return $values->take($limit)->map(fn ($value) => ['value' => $value])->values()->all();
+    }
+
+    protected function getDistinctValuesFromBuilder(mixed $builder, string $column, string $search, string $direction, int $limit): array {
 
         # e.g. job.pricelist.purchasegroup.itemgroup.producttype.name -> join relations, column producttype.name
         $relations = explode('.', $column);
@@ -94,9 +127,9 @@ class DataTable {
             ->select($valueColumn . ' as value')
             ->distinct()
             ->whereNotNull($valueColumn)
-            ->whereRaw($like, ['%' . ($requested['search'] ?? '') . '%'])
-            ->orderBy('value', $this->request->orderDirection === 'desc' ? 'desc' : 'asc')
-            ->limit(min((int) ($this->request->per_page ?: 10), 200))
+            ->whereRaw($like, ['%' . $search . '%'])
+            ->orderBy('value', $direction)
+            ->limit($limit)
             ->pluck('value')
             ->map(fn ($value) => ['value' => $value])
             ->all();
